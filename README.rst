@@ -13,9 +13,8 @@ container image I can in Go. Stage one is the build tools. Then stage two
 copies in the binary for the production image. I'm amazed how small this is
 compareed to previous python based images. This is understandable given the
 basic server is standalone. It also doesn't need libc or other dynamic linked
-libraries:
+libraries::
 
-::
     # Build All images
     docker build --no-cache .
 
