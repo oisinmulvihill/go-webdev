@@ -5,6 +5,7 @@ COPY cmd/ cmd/
 COPY internal/ internal/
 COPY go.mod go.mod
 COPY go.sum go.sum
+RUN apk update && apk add git
 COPY build.sh build.sh
 RUN /bin/sh build.sh
 
