@@ -15,13 +15,11 @@ compareed to previous python based images. This is understandable given the
 basic server is standalone. It also doesn't need libc or other dynamic linked
 libraries::
 
-    # Build All images
-    docker build --no-cache .
+    # Build and product production image
+    docker build --target build-env .
+    docker build --target runtime --tag basic .
 
-    # Build the production image
-    docker build --target production --tag basic .
-
-    # Running the production
+    # Running the production image
     docker run --rm -p 8080:8080 -it basic-latest
 
     $ docker images
