@@ -1,0 +1,25 @@
+services:
+  webapp:
+    build:
+      dockerfile: Dockerfile
+      target: production
+    depends_on:
+      - db
+    environment:
+      DB_PASSWORD: service
+      DB_USER: service
+      DB_NAME: webdev
+      DB_HOST: db
+      DB_PORT: 7432
+    ports:
+      - 18080:8080
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: service
+      POSTGRES_USER: service
+      POSTGRES_DB: webdev
+    ports:
+      - 7432:5432
