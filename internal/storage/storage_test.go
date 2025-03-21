@@ -1,7 +1,7 @@
 package storage
 
 import (
-	"context"
+	"database/sql"
 	"testing"
 
 	"github.com/jackc/pgx/v5"
@@ -9,14 +9,15 @@ import (
 	"github.com/peterldowns/pgtestdb"
 )
 
-func testingConnectionHelper(t *testing.T) *pgx.Conn {
+func NewTestDB(t *testing.T) (*sql.DB, *pgx.Conn) {
 	conf := pgtestdb.Config{
 		DriverName: "pgx",
-		User:       "service",
-		Password:   "service",
-		Host:       "127.0.0.1",
-		Port:       "7432",
-		Options:    "sslmode=disable",
+		User:       "postgres",
+		Password:   "password",
+		// Database:   fmt.Sprintf("webdev-test-%d", rand.Intn(99999)),
+		Host:    "localhost",
+		Port:    "7432",
+		Options: "sslmode=disable",
 	}
 	var migrator pgtestdb.Migrator = pgtestdb.NoopMigrator{}
 	db := pgtestdb.New(t, conf, migrator)
@@ -26,20 +27,19 @@ func testingConnectionHelper(t *testing.T) *pgx.Conn {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer conn.Close(context.Background())
 
 	setUpError := Init(conn)
 	if setUpError != nil {
 		t.Fatal(setUpError)
 	}
 
-	return conn
+	return db, conn
 }
 
 func TestTotalUsersEmptyDB(t *testing.T) {
 	t.Parallel()
 
-	conn := testingConnectionHelper(t)
+	_, conn := NewTestDB(t)
 
 	userCount, err := TotalUsers(conn)
 	if err != nil {
