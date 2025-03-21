@@ -1,7 +1,8 @@
 package core
 
 type Configuration struct {
-	Interface string
-	Port      int
-	GitCommit string
+	Interface   string
+	Port        int
+	GitCommit   string
+	DatabaseDSN string
 }

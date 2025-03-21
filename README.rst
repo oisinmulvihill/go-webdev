@@ -2,7 +2,7 @@ Go WebDev
 =========
 
 Implementing my way through https://gowebexamples.com/ and also adding in
-Docker and other parts along the way.
+Docker, Docker Compose and other bits and things I expect along the way.
 
 
 Docker
@@ -39,3 +39,14 @@ I'm adding in docker compose to manage the build and database dependancies.
 
     # or just the database
     docker compose up -d db
+
+    # building and running the web server outside of docker compose
+    ./build.sh && ./web-server --port 18080
+
+    $ PGPASSWORD=service psql -h 127.0.0.1 -p 7432 -U service -d webdev
+    Type "help" for help.
+
+    webdev=# \dt
+    Did not find any relations.
+    webdev=#
+    \q

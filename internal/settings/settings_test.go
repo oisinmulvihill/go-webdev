@@ -43,3 +43,34 @@ func TestBindPortDefault(t *testing.T) {
 		t.Errorf("expected Port '8080' but got '%v'", config.Port)
 	}
 }
+
+func TestDatabaseDSNFromEnv(t *testing.T) {
+	t.Setenv("DATABASE_DSN", "postgres://bob:example@localhost:5432/bobdb")
+
+	args := []string{}
+
+	config := Recover(args)
+
+	if config.DatabaseDSN != "postgres://bob:example@localhost:5432/bobdb" {
+		t.Errorf("expected Database DSN 'postgres://bob:example@localhost:5432/bobdb' but got '%v'", config.DatabaseDSN)
+	}
+}
+func TestDatabaseDSNFromCLI(t *testing.T) {
+	args := []string{"-database-dsn", "postgres://bob:example@localhost:5432/bobdb"}
+
+	config := Recover(args)
+
+	if config.DatabaseDSN != "postgres://bob:example@localhost:5432/bobdb" {
+		t.Errorf("expected Database DSN 'postgres://bob:example@localhost:5432/bobdb' but got '%v'", config.DatabaseDSN)
+	}
+}
+
+func TestDefaultDatabaseDSN(t *testing.T) {
+	args := []string{}
+
+	config := Recover(args)
+
+	if config.DatabaseDSN != "postgres://service:service@db:7432/webdev" {
+		t.Errorf("expected Database DSN 'postgres://service:service@db:7432/webdev' but got '%v'", config.DatabaseDSN)
+	}
+}
