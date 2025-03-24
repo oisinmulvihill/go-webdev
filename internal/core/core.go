@@ -6,3 +6,14 @@ type Configuration struct {
 	GitCommit   string
 	DatabaseDSN string
 }
+
+type User struct {
+	ID        int
+	Username  string
+	Password  string
+	CreatedAt string
+}
+
+type Users struct {
+	Users []User
+}

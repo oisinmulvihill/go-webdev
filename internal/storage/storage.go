@@ -50,3 +50,12 @@ func TotalUsers(conn *pgx.Conn) (int, error) {
 
 	return total, nil
 }
+
+func AddUser(conn *pgx.Conn, username string, password string) error {
+	query := `INSERT INTO users (username, password) VALUES ('bob', 'bobpassword')`
+	if _, err := conn.Exec(context.Background(), query); err != nil {
+		return err
+	}
+
+	return nil
+}

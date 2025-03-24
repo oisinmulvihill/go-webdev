@@ -41,12 +41,23 @@ I'm adding in docker compose to manage the build and database dependancies.
     docker compose up -d db
 
     # building and running the web server outside of docker compose
-    ./build.sh && ./web-server --port 18080
+    ./build.sh && ./web-server --database-dsn postgres://postgres:password@127.0.0.1:7432/webdev
 
-    $ PGPASSWORD=service psql -h 127.0.0.1 -p 7432 -U service -d webdev
+    $ PGPASSWORD=password psql -h localhost -p 7432 -U postgres -d webdev
+    psql (17.4, server 17.2 (Debian 17.2-1.pgdg120+1))
     Type "help" for help.
 
-    webdev=# \dt
-    Did not find any relations.
+    webdev=# select * from users;
+    id | username | password | created_at
+    ----+----------+----------+------------
+    (0 rows)
+
     webdev=#
-    \q
+
+    # Run all tests which will test against the running postgreql. It will
+    # run the tests in their own isolated DB instances.
+    go test ./...
+
+I'm using docker compose and postgres as the database. There original tutorial
+uses MySQL, however I prefer to work with Postgres instead. For test I'm using
+https://github.com/peterldowns/pgtestdb
