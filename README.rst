@@ -34,6 +34,7 @@ Development
 I'm adding in docker compose to manage the build and database dependancies.
 
 ::
+
     # build and run all parts
     docker compose up
 
