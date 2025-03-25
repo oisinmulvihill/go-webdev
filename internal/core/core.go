@@ -5,6 +5,7 @@ type Configuration struct {
 	Port        int
 	GitCommit   string
 	DatabaseDSN string
+	TemplateDir string
 }
 
 type User struct {
