@@ -3,8 +3,10 @@ package storage
 import (
 	"context"
 	"log"
+	"time"
 
 	"github.com/jackc/pgx/v5"
+	"github.com/oisinmulvihill/go-webdev/internal/core"
 )
 
 func Connection(databaseDSN string) (*pgx.Conn, error) {
@@ -58,4 +60,28 @@ func AddUser(conn *pgx.Conn, username string, password string) error {
 	}
 
 	return nil
+}
+
+func GetUsers(conn *pgx.Conn) ([]core.User, error) {
+
+	rows, err := conn.Query(context.Background(), "SELECT * FROM users")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var users []core.User
+	for rows.Next() {
+
+		var u core.User
+		var createdAt time.Time
+		err := rows.Scan(&u.ID, &u.Username, &u.Password, &createdAt)
+		if err != nil {
+			return nil, err
+		}
+		u.CreatedAt = createdAt.Format(time.RFC3339)
+		users = append(users, u)
+	}
+
+	return users, nil
 }

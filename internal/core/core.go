@@ -13,7 +13,3 @@ type User struct {
 	Password  string
 	CreatedAt string
 }
-
-type Users struct {
-	Users []User
-}

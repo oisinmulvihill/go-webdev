@@ -106,3 +106,50 @@ func TestAddUser(t *testing.T) {
 		t.Errorf("expected 1 users but got %d", total)
 	}
 }
+func TestGetUsersEmptyDB(t *testing.T) {
+	t.Parallel()
+
+	conn := NewTestDB(t)
+	defer conn.Close(context.Background())
+
+	users, err := GetUsers(conn)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(users) != 0 {
+		t.Errorf("expected 0 users but got %d", len(users))
+	}
+}
+func TestGetUsersOKCase(t *testing.T) {
+	t.Parallel()
+
+	conn := NewTestDB(t)
+	defer conn.Close(context.Background())
+
+	users, err := GetUsers(conn)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(users) != 0 {
+		t.Errorf("expected 0 users but got %d", len(users))
+	}
+
+	query := `INSERT INTO users (username, password) VALUES ('bob', 'bobpassword')`
+	if _, err := conn.Exec(context.Background(), query); err != nil {
+		t.Fatalf("Failed to insert a user: %s", err)
+	}
+
+	users, err = GetUsers(conn)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(users) != 1 {
+		t.Errorf("expected 1 users but got %d", len(users))
+	}
+	if users[0].Username != "bob" {
+		t.Errorf("expected bob but got %s", users[0].Username)
+	}
+	if users[0].Password != "bobpassword" {
+		t.Errorf("expected bobpassword but got %s", users[0].Password)
+	}
+}
